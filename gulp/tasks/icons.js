@@ -25,5 +25,4 @@ export default function makeIconsTask({prefix}) {
       ,normalize: true
     }))
     .pipe(gulp.dest(prefix + icons.dest))
-    .pipe(debug())
 }

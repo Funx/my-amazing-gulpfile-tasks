@@ -1,87 +1,75 @@
 import R from 'ramda'
 
 let prefixes = {
-  source: `src/`
-  ,development: `dev/`
-  ,production : `prod/`
+  source: `cms/themes/love_and_zucchini/source/`,
+  development: `cms/themes/love_and_zucchini/assets/`,
+  production : `cms/themes/love_and_zucchini/assets/`,
 }
 
 let backend = {
-  src: [
-    `backend/**/*`
-  ]
-  ,base: `backend/`
+  src: []
+  ,base: ``
   ,dest: ``
 }
 
 let statics = {
-  src: [
-    `frontend/**/*.php`
-    ,`frontend/*.html`
-  ]
-  ,base: `frontend/`
-  ,dest: `application/views/`
+  src: []
+  ,base: ``
+  ,dest: ``
 }
 
 let images = {
   src: [
-    `frontend/images/**/*.{png,jpg,svg,webp}`
+    `images/**/*.{png,jpg,svg,webp}`
   ]
-  ,dest: `assets/`
+  ,dest: `images/`
 }
 
 let icons = {
   src: [
-    `frontend/components/icon/*.svg`
+    `icons/*.svg`
   ]
-  ,dest: `assets/`
+  ,dest: `fonts/`
   ,name: `icons`
   ,template: {
-    src: `frontend/components/icon/_template.scss`
-    ,dest: `../../${prefixes.source}frontend/components/icon/` // must be relative to the font dest path
+    src: `icons/template.css`
+    ,dest: `../../source/css/` // must be relative to the font dest path
   }
 }
 
 let fonts = {
-  src: [
-    `frontend/fonts/*`
-  ]
-  ,dest: `assets/`
+  src: [],
+  dest: ``,
 }
 
 let css = {
   src: [
-    `frontend/index.scss`
-  ]
-  ,bundle: [
-    prefixes.source + `frontend/`
-    ,prefixes.source + `frontend/components/`
-    ,`node_modules/`
-    ,`node_modules/foundation-sites/scss/`
-  ]
-  ,dest: `assets/`
+    `css/index.css`,
+  ],
+  bundle: [
+    `${prefixes.source}css/**/*.css`,
+  ],
+  dest: `/`,
 }
 
 let templates = {
-  src: [
-    `frontend/components/**/*.html`
-  ]
+  src: []
   ,moduleName: `templates`
-  ,dest: `frontend/`
+  ,dest: ``
 }
 
 let scripts = {
   src: [
-    `frontend/index.js`
+    `javascript/index.js`
   ]
   ,bundle: [
-    `${prefixes.source}/frontend/**/*.js`
+    `${prefixes.source}javascript/**/*.js`
   ]
-  ,dest: `assets/`
+  ,dest: `/`
 }
 
 let server = {
-  base: ``
+  base: `../../`
   ,hostname: `0.0.0.0`
   ,port: 8000
 }

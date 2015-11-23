@@ -15,11 +15,11 @@ function makeCopyBackendTask({prefix}) {
 }
 
 function makeCopyStaticsTask({prefix}) {
-  return () =>
-    gulp.src(statics.src, {
-      base: prefixes.source + statics.base
-    })
-    .pipe(gulp.dest(prefix + statics.dest))
+  return () => (
+      gulp
+        .src(statics.src, { base: prefixes.source + statics.base})
+        .pipe(gulp.dest(prefix + statics.dest))
+    )
 }
 
 export default {makeCopyStaticsTask, makeCopyBackendTask}

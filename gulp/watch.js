@@ -9,10 +9,10 @@ let watchConfig = [
     taskName: `copy`
     ,files: statics.src.concat(backend.src, fonts.src)
   }
-  ,{
-    taskName: `phpunit`
-    ,files: backend.src
-  }
+  // ,{
+  //   taskName: `phpunit`
+  //   ,files: backend.src
+  // }
   ,{
     taskName: `icons`
     ,files: icons.src.concat(icons.template.src)
@@ -25,20 +25,27 @@ let watchConfig = [
   }
   ,{
     taskName: `images`
-    ,files: images.src.concat([cssPath])
-    // ,filesDest: [cssPath] // watch these files too
-  }
-  ,{
-    taskName: `templates`
-    ,files: templates.src
-  }
-  ,{
+    ,files: images.src.concat()
+    ,stream: true // stop reloading all the fucking time !
+    ,filesDest: [cssPath] // watch these files too
+  },
+  {
+    taskName: `reload`,
+    files: [
+      './cms/**/*.htm',
+    ],
+    filesDest: [images.dest], // watch these files too
+  },
+  // {
+  //   taskName: `templates`,
+  //   files: templates.src,
+  // },
+  {
     taskName: `css`
     ,files: css.bundle
       .concat([
         '!' + icons.template.dest.replace(/(\.\.\/)/g, '')
       ])
-      .map((path) => path + '**/*.{css,scss,sass}')
       .concat(css.src)
       .concat([prefixes.source + icons.template.src])
 

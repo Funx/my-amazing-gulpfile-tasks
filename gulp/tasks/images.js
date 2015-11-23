@@ -54,9 +54,6 @@ export default function makeImagesTask({prefix}) {
         title: `src:`
       }))
       .pipe(changed(prefix + images.dest))
-      .pipe(debug({
-        title: `changed:`
-      }))
       .pipe(responsive(configFile, options))
       .pipe(imagemin({
         progressive: true
@@ -66,9 +63,6 @@ export default function makeImagesTask({prefix}) {
         ,use: [pngquant()]
       }))
       .pipe(gulp.dest(prefix + images.dest))
-      .pipe(debug({
-        title: `generated:`
-      }))
   }
 
   return () => {
@@ -76,16 +70,12 @@ export default function makeImagesTask({prefix}) {
     let oldRetinasImages = retinasImages.map((image) => image.rename)
     retinasImages = getResponsiveImagesConfig()
     let newRetinasImages = retinasImages.map((image) => image.rename).concat(imageFiles)
-    console.log(oldRetinasImages)
-    console.log(newRetinasImages)
 
     let difference = R.difference(newRetinasImages, oldRetinasImages)
 
     if (difference.length) {
       let imagesToProcess = retinasImages
         .filter((image) => difference.indexOf(image.rename) > -1) // should process ?
-
-      console.log(imagesToProcess)
       return processImages(imagesToProcess);
     } else {
       return;

@@ -6,7 +6,7 @@ let {backend, statics} = paths
 
 
 function makeCleanTask({prefix}) {
-  return () => del([prefix + '**/*', '!' + prefix + 'uploads/**/*'])
+  // return () => del([prefix + '**/*', '!' + prefix + 'uploads/**/*'])
 }
 
 export default makeCleanTask

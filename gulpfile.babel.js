@@ -38,11 +38,11 @@ function runMainTask(context) {
   gulp.task('scripts', makeScriptsTask(context))
 
   gulp.task('build', (end) => runSequence(
+  //   [
+  //     'clean'
+  //   , 'templates'
+  // ],
     [
-      'clean'
-    , 'templates'
-    ]
-    ,[
       'copy'
       ,'css'
       ,'scripts'
@@ -56,8 +56,9 @@ function runMainTask(context) {
   gulp.task('watch', ['server'], makeWatchTask(context))
 
   if (context.production) {
-    return gulp.start('build')
+    return gulp.start('watch')
   } else {
+    console.log('start watch task')
     return gulp.start('watch')
   }
 }

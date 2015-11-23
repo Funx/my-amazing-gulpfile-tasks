@@ -38,7 +38,7 @@ export default function makeScriptsTask({prefix, production, browserSyncInstance
     if (production) {
       return bundle()
     } else {
-      // getBundler().on('update', bundle({reload: true}))
+      getBundler().on('update', () => bundle({reload: true}))
       return bundle({reload: true})
     }
   }
