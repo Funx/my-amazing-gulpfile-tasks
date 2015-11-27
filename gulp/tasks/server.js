@@ -1,18 +1,18 @@
 import php from 'gulp-connect-php'
-import {server as serverConfig, prefixes} from '../config.js'
-let {hostname, port, base} = serverConfig
+import config from '../config.js'
+let { prefixes } = config
+let { hostname, port, base } = config.server
 
-export default function makeServerTask({prefix, browserSyncInstance}) {
+export default function makeServerTask({ prefix, browserSyncInstance }) {
   return () => {
     php.server({
-      hostname,port
-      ,base: `./cms`
-      // ,base: `./` + prefix + base
+      hostname,
+      port,
     }, () => {
       browserSyncInstance.init({
         proxy: `http://${hostname}:${port}`,
         notify: false,
-        open: false
+        open: false,
       })
     })
   }

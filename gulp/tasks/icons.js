@@ -2,10 +2,10 @@ import gulp from 'gulp'
 import iconfont from 'gulp-iconfont'
 import iconfontCss from 'gulp-iconfont-css'
 import rename from 'gulp-rename'
-import debug from 'gulp-debug'
 
-import {prefixes, paths} from '../config.js'
-let {icons} = paths
+import config from '../config.js'
+let {prefixes} = config
+let {icons} = config.paths
 
 export default function makeIconsTask({prefix}) {
   return (next) => gulp.src(icons.src)

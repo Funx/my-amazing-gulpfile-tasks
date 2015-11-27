@@ -1,85 +1,64 @@
 import R from 'ramda'
 
 let prefixes = {
-  source: `cms/themes/love_and_zucchini/source/`,
-  development: `cms/themes/love_and_zucchini/assets/`,
-  production : `cms/themes/love_and_zucchini/assets/`,
-}
-
-let backend = {
-  src: []
-  ,base: ``
-  ,dest: ``
-}
-
-let statics = {
-  src: []
-  ,base: ``
-  ,dest: ``
+  source: `themes/zygmund2016/assets/`,
+  development: `themes/zygmund2016/assets/`,
+  production : `themes/zygmund2016/assets/`,
 }
 
 let images = {
   src: [
-    `images/**/*.{png,jpg,svg,webp}`
-  ]
-  ,dest: `images/`
+    `_images/**/*.{png,jpg,svg,webp}`,
+  ],
+  dest: `images/`,
 }
 
 let icons = {
   src: [
-    `icons/*.svg`
-  ]
-  ,dest: `fonts/`
-  ,name: `icons`
-  ,template: {
-    src: `icons/template.css`
-    ,dest: `../../source/css/` // must be relative to the font dest path
-  }
-}
-
-let fonts = {
-  src: [],
-  dest: ``,
+    `_icons/*.svg`,
+  ],
+  dest: `fonts/`,
+  name: `icons`,
+  template: {
+    src: `_icons/template.css`,
+    dest: `../_css/`, // must be relative to the font dest path
+  },
 }
 
 let css = {
   src: [
-    `css/index.css`,
+    `_css/index.css`,
   ],
   bundle: [
-    `${prefixes.source}css/**/*.css`,
+    `${prefixes.source}_css/**/*.css`,
   ],
   dest: `/`,
 }
 
-let templates = {
-  src: []
-  ,moduleName: `templates`
-  ,dest: ``
-}
-
 let scripts = {
   src: [
-    `javascript/index.js`
-  ]
-  ,bundle: [
-    `${prefixes.source}javascript/**/*.js`
-  ]
-  ,dest: `/`
+    `_javascript/index.js`,
+  ],
+  bundle: [
+    `${prefixes.source}_javascript/**/*.js`,
+  ],
+  dest: `/`,
 }
 
 let server = {
-  base: `../../`
-  ,hostname: `0.0.0.0`
-  ,port: 8000
+  base: `./`,
+  hostname: `0.0.0.0`,
+  port: 8000,
 }
 
-let addSourcePrefix = R.mapObj((obj) => {
-  obj.src = obj.src.map((path) => prefixes.source + path)
-  return obj
-})
-
-let paths = {backend, statics, images, icons, fonts, css, templates, scripts}
-paths = addSourcePrefix(paths)
-let config = {prefixes, paths, server}
-export default config
+// group as object and add prefix 'source' to each src
+let paths = R.mapObj(
+  (obj) => {
+    obj.src = obj.src.map(
+      (path) => prefixes.source + path
+    )
+    return obj
+  },
+  {images, icons, css, scripts}
+)
+export default {prefixes, paths, server}

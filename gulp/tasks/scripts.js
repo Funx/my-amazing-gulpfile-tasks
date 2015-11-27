@@ -1,45 +1,61 @@
 import gulp from 'gulp'
-import browserify from 'browserify'
-import watchify from 'watchify'
 import babelify from 'babelify'
 import source from 'vinyl-source-stream'
 import buffer from 'vinyl-buffer'
-import ngAnnotate from 'gulp-ng-annotate'
+import uglify from 'gulp-uglify'
+import persistify from 'persistify'
+import rename from 'gulp-rename'
+import sourcemaps from 'gulp-sourcemaps'
+import R from 'ramda'
 
+import config from '../config.js'
+let {scripts} = config.paths
+let sourceFile = R.compose(
+  R.last,
+  R.split('/'),
+  R.head,
+  R.prop('src')
+)(scripts)
 
-import {paths} from '../config.js'
-let {scripts} = paths
-let sourceFile = scripts.src[0].split(`/`)
-sourceFile = sourceFile[sourceFile.length - 1]
+console.log(scripts.src)
 
 export default function makeScriptsTask({prefix, production, browserSyncInstance}) {
   let bundler
-  function getBundler() {
-    if (!bundler) {
-      bundler = watchify(browserify(scripts.src, {debug: true}))
-    }
-    return bundler
+
+  var b = persistify( {
+    debug: true,
+    noparse: [
+      'jquery',
+      'ramda',
+    ],
+    transform: [
+      babelify,
+    ],
+    paths: [],
+  }, { watch: !production } )
+
+  b.add(scripts.src)
+  b.on('bundle:done', (time) => console.log('bundle:done', time))
+  b.on('error', (err) => console.log('bundle:error', err))
+
+  return () => {
+    b.on('update', () => {
+      bundle({reload: !production})
+    })
+    return bundle({reload: false})
   }
 
   function bundle({reload}) {
-    let reloadFn = reload ? browserSyncInstance.stream : () => true
-    return getBundler()
-      .transform(babelify)
-      .bundle()
+    let reloadFn = reload ? browserSyncInstance.reload : () => true
+    return b.bundle()
       .on(`error`, (err) => console.log(`Error: ` + err.message))
       .pipe(source(sourceFile))
       .pipe(buffer())
-      .pipe(ngAnnotate())
+      .pipe(sourcemaps.init())
+      .pipe(uglify())
+      .pipe(rename('bundle.js'))
+      .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest(prefix + scripts.dest))
-      .pipe(reloadFn())
-  }
-
-  return () => {
-    if (production) {
-      return bundle()
-    } else {
-      getBundler().on('update', () => bundle({reload: true}))
-      return bundle({reload: true})
-    }
+      .pipe(browserSyncInstance.stream())
   }
 }
